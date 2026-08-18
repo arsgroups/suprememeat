@@ -18,6 +18,14 @@ if (yearEl) {
   yearEl.textContent = new Date().getFullYear();
 }
 
+// Graceful fallback for product photos not yet uploaded
+document.querySelectorAll('.product-photo img').forEach((img) => {
+  img.addEventListener('error', () => {
+    img.closest('.product-photo')?.classList.add('photo-pending');
+    img.remove();
+  });
+});
+
 // Sticky header shrink shadow on scroll
 const header = document.querySelector('.site-header');
 if (header) {
