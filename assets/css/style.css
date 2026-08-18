@@ -250,7 +250,17 @@ ul { padding-left: 1.2em; }
 .hero-overlay--promo {
   background: linear-gradient(100deg, rgba(46,7,15,.94) 20%, rgba(122,20,36,.78) 55%, rgba(122,20,36,.42) 100%);
 }
+.hero-overlay--showcase {
+  background: linear-gradient(180deg, rgba(20,4,8,0) 50%, rgba(20,4,8,.8) 100%);
+}
 .hero-content { position: relative; z-index: 1; max-width: 640px; padding: 90px 20px; }
+.hero-content--showcase {
+  align-self: flex-end;
+  max-width: none;
+  width: 100%;
+  text-align: center;
+  padding-bottom: 64px;
+}
 .slider-dots {
   position: absolute;
   bottom: 22px;
@@ -747,6 +757,52 @@ button.btn, button.whatsapp-float, button.order-modal-close {
   margin: 0 0 16px;
 }
 .order-submit { width: 100%; justify-content: center; margin-top: 4px; }
+
+/* ---- WhatsApp choice modal ---- */
+.choice-modal-panel {
+  position: relative;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: 0 24px 60px rgba(20, 4, 8, .4);
+  width: 100%;
+  max-width: 400px;
+  padding: 32px 28px 28px;
+  transform: translateY(16px) scale(.98);
+  transition: transform .2s ease;
+}
+.order-modal.is-open .choice-modal-panel { transform: translateY(0) scale(1); }
+.choice-modal-panel h3 { font-size: 1.35rem; margin-bottom: 6px; padding-right: 26px; }
+.choice-options { display: flex; flex-direction: column; gap: 12px; margin-top: 22px; }
+.choice-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  background: var(--cream);
+  border: 1px solid rgba(74,13,24,.14);
+  border-radius: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color .15s ease, background .15s ease, transform .15s ease;
+}
+.choice-option:hover {
+  border-color: var(--gold);
+  background: var(--cream-dark);
+  transform: translateY(-2px);
+}
+.choice-option-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(46,7,15,.08);
+}
+.choice-option-text { display: flex; flex-direction: column; gap: 2px; }
+.choice-option-text strong { color: var(--maroon-dark); font-size: .98rem; }
+.choice-option-text small { color: var(--text-muted); font-size: .8rem; }
 
 @media (max-width: 520px) {
   .order-modal-panel { padding: 26px 20px 22px; }

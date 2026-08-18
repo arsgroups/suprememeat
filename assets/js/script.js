@@ -73,22 +73,47 @@ if (heroSlider) {
   startAuto();
 }
 
-// Order form modal (WhatsApp)
+// WhatsApp entry point: choice modal (Enquiry vs Place Order), then order form
 const orderModal = document.getElementById('orderModal');
-if (orderModal) {
+const choiceModal = document.getElementById('whatsappChoiceModal');
+
+if (orderModal && choiceModal) {
   const orderForm = document.getElementById('orderForm');
   const orderError = document.getElementById('orderFormError');
   const orderNotes = document.getElementById('orderNotes');
   const openTriggers = document.querySelectorAll('.js-open-order-form');
-  const closeTriggers = orderModal.querySelectorAll('[data-close]');
+  const orderCloseTriggers = orderModal.querySelectorAll('[data-close]');
+  const choiceCloseTriggers = choiceModal.querySelectorAll('[data-close-choice]');
   const ORDER_WHATSAPP_NUMBER = '6581784966';
+  const ENQUIRY_WHATSAPP_NUMBER = '6584119764';
   let lastFocused = null;
+  let pendingTrigger = null;
+
+  function anyModalOpen() {
+    return orderModal.classList.contains('is-open') || choiceModal.classList.contains('is-open');
+  }
+  function lockScroll() { document.body.style.overflow = 'hidden'; }
+  function unlockScrollIfClear() { if (!anyModalOpen()) document.body.style.overflow = ''; }
+
+  function openChoiceModal(trigger) {
+    lastFocused = document.activeElement;
+    pendingTrigger = trigger;
+    choiceModal.classList.add('is-open');
+    choiceModal.setAttribute('aria-hidden', 'false');
+    lockScroll();
+  }
+
+  function closeChoiceModal() {
+    choiceModal.classList.remove('is-open');
+    choiceModal.setAttribute('aria-hidden', 'true');
+    unlockScrollIfClear();
+    if (!orderModal.classList.contains('is-open')) lastFocused?.focus();
+  }
 
   function openOrderModal(trigger) {
-    lastFocused = document.activeElement;
     orderModal.classList.add('is-open');
     orderModal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
+    lockScroll();
     if (trigger?.dataset.note && !orderNotes.value) {
       orderNotes.value = trigger.dataset.note;
     }
@@ -99,20 +124,38 @@ if (orderModal) {
   function closeOrderModal() {
     orderModal.classList.remove('is-open');
     orderModal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
+    unlockScrollIfClear();
     lastFocused?.focus();
   }
 
   openTriggers.forEach((btn) => {
-    btn.addEventListener('click', () => openOrderModal(btn));
+    btn.addEventListener('click', () => openChoiceModal(btn));
   });
 
-  closeTriggers.forEach((el) => {
+  choiceCloseTriggers.forEach((el) => {
+    el.addEventListener('click', closeChoiceModal);
+  });
+
+  orderCloseTriggers.forEach((el) => {
     el.addEventListener('click', closeOrderModal);
   });
 
+  document.getElementById('choiceEnquiry')?.addEventListener('click', () => {
+    const text = encodeURIComponent("Hi Supreme Meat, I have an enquiry.");
+    window.open(`https://wa.me/${ENQUIRY_WHATSAPP_NUMBER}?text=${text}`, '_blank', 'noopener');
+    closeChoiceModal();
+  });
+
+  document.getElementById('choiceOrder')?.addEventListener('click', () => {
+    const trigger = pendingTrigger;
+    closeChoiceModal();
+    openOrderModal(trigger);
+  });
+
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && orderModal.classList.contains('is-open')) closeOrderModal();
+    if (e.key !== 'Escape') return;
+    if (orderModal.classList.contains('is-open')) closeOrderModal();
+    else if (choiceModal.classList.contains('is-open')) closeChoiceModal();
   });
 
   orderForm.querySelectorAll('.item-check').forEach((checkbox) => {
