@@ -73,6 +73,99 @@ if (heroSlider) {
   startAuto();
 }
 
+// Order form modal (WhatsApp)
+const orderModal = document.getElementById('orderModal');
+if (orderModal) {
+  const orderForm = document.getElementById('orderForm');
+  const orderError = document.getElementById('orderFormError');
+  const orderNotes = document.getElementById('orderNotes');
+  const openTriggers = document.querySelectorAll('.js-open-order-form');
+  const closeTriggers = orderModal.querySelectorAll('[data-close]');
+  const ORDER_WHATSAPP_NUMBER = '6581784966';
+  let lastFocused = null;
+
+  function openOrderModal(trigger) {
+    lastFocused = document.activeElement;
+    orderModal.classList.add('is-open');
+    orderModal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    if (trigger?.dataset.note && !orderNotes.value) {
+      orderNotes.value = trigger.dataset.note;
+    }
+    orderError.hidden = true;
+    document.getElementById('orderName')?.focus();
+  }
+
+  function closeOrderModal() {
+    orderModal.classList.remove('is-open');
+    orderModal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    lastFocused?.focus();
+  }
+
+  openTriggers.forEach((btn) => {
+    btn.addEventListener('click', () => openOrderModal(btn));
+  });
+
+  closeTriggers.forEach((el) => {
+    el.addEventListener('click', closeOrderModal);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && orderModal.classList.contains('is-open')) closeOrderModal();
+  });
+
+  orderForm.querySelectorAll('.item-check').forEach((checkbox) => {
+    checkbox.addEventListener('change', () => {
+      const qtyInput = checkbox.closest('.order-item-row').querySelector('.item-qty');
+      qtyInput.disabled = !checkbox.checked;
+    });
+  });
+
+  orderForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('orderName').value.trim();
+    const contact = document.getElementById('orderContact').value.trim();
+    const notes = orderNotes.value.trim();
+    const checked = Array.from(orderForm.querySelectorAll('.item-check:checked'));
+
+    if (!name || !contact) {
+      orderError.textContent = 'Please fill in your name and contact number.';
+      orderError.hidden = false;
+      return;
+    }
+    if (checked.length === 0) {
+      orderError.textContent = 'Please select at least one item.';
+      orderError.hidden = false;
+      return;
+    }
+    orderError.hidden = true;
+
+    const lines = [
+      "Hi Supreme Meat, I'd like to place an order:",
+      '',
+      `*Name:* ${name}`,
+      `*Contact:* ${contact}`,
+      '',
+      '*Items:*',
+    ];
+    checked.forEach((cb) => {
+      const qty = cb.closest('.order-item-row').querySelector('.item-qty').value || '1';
+      lines.push(`- ${cb.value} x ${qty}kg`);
+    });
+    if (notes) {
+      lines.push('');
+      lines.push(`*Notes:* ${notes}`);
+    }
+
+    const text = encodeURIComponent(lines.join('\n'));
+    window.open(`https://wa.me/${ORDER_WHATSAPP_NUMBER}?text=${text}`, '_blank', 'noopener');
+    closeOrderModal();
+    orderForm.reset();
+    orderForm.querySelectorAll('.item-qty').forEach((q) => { q.disabled = true; });
+  });
+}
+
 // Graceful fallback for product photos not yet uploaded
 document.querySelectorAll('.product-photo img').forEach((img) => {
   img.addEventListener('error', () => {

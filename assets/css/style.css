@@ -591,6 +591,167 @@ h2.center, .section-sub.center { margin-left: auto; margin-right: auto; }
 .promo-next-inner { max-width: 520px; margin: 0 auto; text-align: center; }
 .promo-next-inner p { color: var(--text-muted); margin-bottom: 22px; }
 
+/* ---- Order form modal ---- */
+button.btn, button.whatsapp-float, button.order-modal-close {
+  font-family: inherit;
+  font-size: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.order-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .2s ease, visibility .2s ease;
+}
+.order-modal.is-open { visibility: visible; opacity: 1; }
+.order-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(28, 20, 16, .6);
+  backdrop-filter: blur(2px);
+}
+.order-modal-panel {
+  position: relative;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: 0 24px 60px rgba(20, 4, 8, .4);
+  width: 100%;
+  max-width: 560px;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 32px 30px 28px;
+  transform: translateY(16px) scale(.98);
+  transition: transform .2s ease;
+}
+.order-modal.is-open .order-modal-panel { transform: translateY(0) scale(1); }
+.order-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: var(--cream-dark);
+  color: var(--maroon-dark);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.order-modal-close:hover { background: var(--gold-light); }
+.order-modal-panel h3 {
+  font-size: 1.5rem;
+  margin-bottom: 6px;
+  padding-right: 30px;
+}
+.order-modal-sub { color: var(--text-muted); font-size: .9rem; margin: 0 0 22px; }
+
+.form-row { margin-bottom: 18px; }
+.form-row > label {
+  display: block;
+  font-weight: 600;
+  font-size: .88rem;
+  color: var(--maroon-dark);
+  margin-bottom: 7px;
+}
+.form-row > label span { font-weight: 400; color: var(--text-muted); }
+.form-row input[type="text"],
+.form-row input[type="tel"],
+.form-row textarea {
+  width: 100%;
+  border: 1px solid rgba(74,13,24,.18);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: .95rem;
+  color: var(--text-dark);
+  background: var(--cream);
+}
+.form-row input[type="text"]:focus,
+.form-row input[type="tel"]:focus,
+.form-row textarea:focus,
+.item-qty:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+.form-row textarea { resize: vertical; }
+
+.order-items-list {
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid rgba(74,13,24,.12);
+  border-radius: 10px;
+  padding: 6px 14px;
+  background: var(--cream);
+}
+.order-items-group {
+  font-size: .76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--gold-dark);
+  margin: 12px 0 4px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(74,13,24,.08);
+}
+.order-items-group:first-child { margin-top: 4px; padding-top: 0; border-top: none; }
+.order-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 0;
+}
+.order-item-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: .9rem;
+  color: var(--text-dark);
+  cursor: pointer;
+}
+.order-item-label input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--maroon);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.item-qty {
+  width: 64px;
+  border: 1px solid rgba(74,13,24,.18);
+  border-radius: 8px;
+  padding: 5px 8px;
+  font-family: inherit;
+  font-size: .88rem;
+  text-align: center;
+  background: #fff;
+  color: var(--text-dark);
+}
+.item-qty:disabled { background: var(--cream-dark); color: var(--text-muted); opacity: .6; }
+
+.order-form-error {
+  color: #b3261e;
+  background: #fdecea;
+  border: 1px solid #f3c1bd;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: .85rem;
+  margin: 0 0 16px;
+}
+.order-submit { width: 100%; justify-content: center; margin-top: 4px; }
+
+@media (max-width: 520px) {
+  .order-modal-panel { padding: 26px 20px 22px; }
+}
+
 /* ---- Contact ---- */
 .contact { background: var(--cream); }
 .contact-grid {
@@ -665,6 +826,9 @@ h2.center, .section-sub.center { margin-left: auto; margin-right: auto; }
   width: 58px; height: 58px;
   background: #25D366;
   color: #fff;
+  border: none;
+  padding: 0;
+  cursor: pointer;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 8px 22px rgba(0,0,0,.3);
