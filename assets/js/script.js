@@ -84,7 +84,7 @@ if (orderModal && choiceModal) {
   const openTriggers = document.querySelectorAll('.js-open-order-form');
   const orderCloseTriggers = orderModal.querySelectorAll('[data-close]');
   const choiceCloseTriggers = choiceModal.querySelectorAll('[data-close-choice]');
-  const ORDER_WHATSAPP_NUMBER = '6581784966';
+  const ORDER_WHATSAPP_NUMBER = '6584119764';
   const ENQUIRY_WHATSAPP_NUMBER = '6584119764';
   let lastFocused = null;
   let pendingTrigger = null;
